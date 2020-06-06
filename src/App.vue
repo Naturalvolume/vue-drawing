@@ -2,12 +2,8 @@
   <div id="app">
     <!-- 渲染路由 -->
     <!-- <router-view/> -->
-    <Tab></Tab>
-
-
-
+    <Tab :ok='isok'></Tab>
     <div class="drawing-container">
-      <SlideTab></SlideTab>
       <Drawing></Drawing>
     </div>
 
@@ -16,7 +12,6 @@
 
 <script>
 import Tab from './components/tab.vue'
-import SlideTab from './components/slidetab.vue'
 import Drawing from './components/drawing'
 
 export default {
@@ -27,8 +22,23 @@ export default {
   // 要在这里把要用的组件注册一下
   components: {
     Tab,
-    SlideTab,
     Drawing
+  },
+  data:() => {
+    return {
+      isok: true,
+      // 是否选择颜色
+      ischoosecolor: false,
+      //
+      toolsToggle: false,
+      // 铅笔粗细初始值
+      penSize: 1,
+      // 虚线间隔初始值
+      lineType: [0, 0],
+      //
+      canDraw: false,
+    }
+
   }
 
 }
@@ -37,10 +47,17 @@ export default {
 <style>
 
 .drawing-container {
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-around;
-  width:100%;
-  height:100%;
-  margin-top: 56px;
+  background-color:red;
+  /* width:100%;
+  height:100%; */
+  /* margin-top: 56px; */
 }
 </style>
