@@ -45,8 +45,8 @@ export default {
 <style scoped>
   .drawing-wrapper {
     /* position: fixed;
-    top: 0; */
-    box-sizing: border-box;
+    top: 0;
+    box-sizing: border-box; */
     position: relative;
     width: 100%;
     height: 100%;
@@ -54,12 +54,15 @@ export default {
     background-color: gray;
   }
   canvas {
+    /* 绝对定位元素居中，定宽、margin:auto，left right 0缺一不可 */
     position: absolute;
     width: 80%;
     height: 80%;
+    margin: auto;
+    left: 0;
+    right: 0;
     top: 0;
     bottom: 0;
-    margin: 0 auto;
     background-color:yellow;
   }
 </style>

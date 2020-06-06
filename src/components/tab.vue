@@ -2,10 +2,7 @@
   <div class="tabbar">
     <div class="tab-container">
       <div class="title">
-        <!-- {{this.okfine}} -->
-        <div>
-          {{ok}}
-        </div>
+        {{title}}
       </div>
       <div class="button" v-for="tab in tabs" :key='tab.title'>
           <!-- unicode直接在标签中使用，可以识别这是unicode编码
@@ -95,40 +92,45 @@ export default {
     }
 
   }
-  
+
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .tabbar {
-  /* 别忘了设置包围盒类型 */
   box-sizing: border-box;
-  position: fixed;
+  /* position: fixed; */
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  top: 0;
-  left: 0;
+  /* align-items: center; */
+  /* top: 0;
+  left: 0; */
+  /* 找规律：设置了box-sizing后，一定要在每一层都设置宽高 */
   width: 100%;
+  height: 100%;
   padding: 10px 30px;
   background-color: #546e7a;
 }
 .tab-container, .tools-container {
+  /* 尤其是高度，好像不设置高度占100%，它就会自由发挥，超出限制 */
+  height: 100%;
   display: flex;
   align-items: center;
+
 }
 .title {
   font-size: 20px;
   margin-right: 10px;
+  /* color就是设置成了内容物的颜色，包括字体 */
   color: #eceff1;
 }
 button {
-  font-size: 16px;
   padding: 5px 10px;
   margin: 0 5px;
 }
 span {
+  font-size: 16px;
   margin-right: 10px;
 }
 </style>

@@ -2,11 +2,13 @@
   <div id="app">
     <!-- 渲染路由 -->
     <!-- <router-view/> -->
-    <Tab :ok='isok'></Tab>
+    <div class="tab-container">
+      <Tab :ok='isok'></Tab>
+    </div>
     <div class="drawing-container">
       <Drawing></Drawing>
     </div>
-
+    <!-- <div class="footer"></div> -->
   </div>
 </template>
 
@@ -45,19 +47,34 @@ export default {
 </script>
 
 <style>
+#app {
+  /* 在根元素中使用flex，才能在子元素中用flex:1吸收剩余元素 */
+  /* display: flex; */
+  /* 这个方向决定了 flex:1 吸收的方向 */
+  /* flex-direction: column; */
 
-.drawing-container {
-  box-sizing: border-box;
+  /* box-sizing: border-box;   根元素这里没有使用padding之类不用定义这个，这个属性并不能继承*/
   position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
+  background-color: blue;
+  /* 这里实现占满整个视口，注意要设置width、height，只设置top left不能实现这样的效果 */
+  width: 100%;
+  height: 100%;
+  /* top: 0;
+  left: 0; */
+}
+.tab-container {
+  height: 60px;
+  width: 100%;
   background-color:red;
-  /* width:100%;
-  height:100%; */
-  /* margin-top: 56px; */
+}
+.drawing-container {
+  width: 100%;
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  /* height: calc(100% -60px);    这个属性并没有做成占满剩下的高度 */
+  /* display: flex; */
+  /* flex: 1; */
+  background-color: aqua;
 }
 </style>
