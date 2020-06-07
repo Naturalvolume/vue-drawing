@@ -3,10 +3,11 @@
     <!-- 渲染路由 -->
     <!-- <router-view/> -->
     <div class="tab-container">
-      <Tab :ok='isok'></Tab>
+      <!-- 父组件监听子组件的no事件 -->
+      <Tab @changecurcor='change' @changecolor='changecolor'></Tab>
     </div>
     <div class="drawing-container">
-      <Drawing></Drawing>
+      <Drawing :curcursor='curcursor' :colors="colors"></Drawing>
     </div>
     <!-- <div class="footer"></div> -->
   </div>
@@ -28,10 +29,19 @@ export default {
   },
   data:() => {
     return {
-      isok: true,
+      // 设置默认鼠标样式
+      curcursor: 'default',
       // 是否选择颜色
       ischoosecolor: false,
       //
+      colors: {
+        hex: '#194d33',
+        hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+        hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
+        rgba: { r: 25, g: 77, b: 51, a: 1 },
+        a: 1
+      },
+
       toolsToggle: false,
       // 铅笔粗细初始值
       penSize: 1,
@@ -40,7 +50,14 @@ export default {
       //
       canDraw: false,
     }
-
+  },
+  methods: {
+    change(val) {
+      this.curcursor = val
+    },
+    changecolor(val) {
+      this.colors.hex = val.hex
+    }
   }
 
 }
@@ -66,6 +83,7 @@ export default {
   height: 60px;
   width: 100%;
   background-color:red;
+  /* z-index: 10; */
 }
 .drawing-container {
   width: 100%;

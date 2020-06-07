@@ -72,3 +72,20 @@ let obj = { icon: '\ue70b'}   （UCS-2编码前缀 \u ）
   background-color: aqua;
 }
 ```
+### 3.span元素（行盒）居中的方法
+```
+方式一：设置text-align + line-height
+text-align: center; （水平居中）
+line-height: height; (等于高度，垂直居中)
+方式二：变成块盒
+display: block; (直接就居中了)
+margin: 5px; (设置居中的尺寸)
+```
+### 4.动态绑定class的方法
+对vue的语法太迷惑，到底啥时候加引号，啥时候加大括号
+```
+isChoose是布尔值，决定是否显示selected样式
+:class="{'selected': isChoose}"
+三元表达式，errorClass一直显示
+<div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+```
