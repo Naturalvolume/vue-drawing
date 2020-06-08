@@ -89,3 +89,4 @@ isChoose是布尔值，决定是否显示selected样式
 三元表达式，errorClass一直显示
 <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
 ```
+### 5.[颜色选择器的使用](https://www.cnblogs.com/caohanren/articles/11851131.html)
