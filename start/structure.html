@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Part I · GitBook</title>
+        <title>项目基本架构 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,8 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="writing.html" />
+    <link rel="next" href="css.html" />
     
-    
-    <link rel="prev" href="../" />
     
 
     </head>
@@ -94,7 +92,7 @@
                 <a href="../">
             
                     
-                    Introduction
+                    简介
             
                 </a>
             
@@ -102,26 +100,26 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2" data-path="./">
+        <li class="chapter " data-level="1.2" >
             
-                <a href="./">
+                <span>
             
                     
-                    Part I
+                    开始
             
-                </a>
+                </span>
             
 
             
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="1.2.1" data-path="writing.html">
+        <li class="chapter active" data-level="1.2.1" data-path="structure.html">
             
-                <a href="writing.html">
+                <a href="structure.html">
             
                     
-                    Writing is nice
+                    项目基本架构
             
                 </a>
             
@@ -129,12 +127,12 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.2" data-path="gitbook.html">
+        <li class="chapter " data-level="1.2.2" data-path="css.html">
             
-                <a href="gitbook.html">
+                <a href="css.html">
             
                     
-                    GitBook is nice
+                    页面布局
             
                 </a>
             
@@ -147,14 +145,14 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="../part2/README.md">
+        <li class="chapter " data-level="1.3" >
             
                 <span>
             
                     
-                    Part II
+                    数据
             
-                </a>
+                </span>
             
 
             
@@ -166,7 +164,7 @@
                 <span>
             
                     
-                    We love feedback
+                    菜单栏数据
             
                 </a>
             
@@ -179,7 +177,7 @@
                 <span>
             
                     
-                    Better tools for authors
+                    画板数据
             
                 </a>
             
@@ -222,7 +220,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >Part I</a>
+        <a href=".." >项目基本架构</a>
     </h1>
 </div>
 
@@ -237,7 +235,97 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="im-part-1">im part 1</h1>
+                                <h2 id="&#x9879;&#x76EE;&#x67B6;&#x6784;">&#x9879;&#x76EE;&#x67B6;&#x6784;</h2>
+<p>&#x672C;&#x9879;&#x76EE;&#x975E;&#x5E38;&#x7B80;&#x5355;&#xFF0C;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x5728;&#x7EBF;&#x753B;&#x677F;&#xFF0C;&#x6574;&#x4E2A;&#x7F51;&#x9875;&#x53EA;&#x5206;&#x4E3A;&#x4E24;&#x4E2A;&#x7EC4;&#x4EF6;&#xFF0C;&#x5934;&#x90E8;&#x83DC;&#x5355;&#x680F;&#x548C;&#x753B;&#x677F;&#xFF0C;&#x9879;&#x76EE;&#x7ED3;&#x6784;&#x4E3A;&#xFF08;&#x6839;&#x76EE;&#x5F55;&#x4E3A;src&#xFF09;&#xFF1A;</p>
+<ul>
+<li>main.js&#xFF1A;&#x65B0;&#x5EFA;vue&#x5B9E;&#x4F8B;&#xFF0C;&#x6574;&#x4E2A;&#x9879;&#x76EE;&#x7684;&#x6839;&#x6587;&#x4EF6;</li>
+<li>App.vue&#xFF1A;&#x6302;&#x8F7D;&#x5728;vue&#x5B9E;&#x4F8B;&#x4E0A;&#x7684;&#xFF0C;&#x6839;&#x5143;&#x7D20;</li>
+<li>components<ul>
+<li>tab.vue&#xFF1A;&#x9876;&#x90E8;&#x83DC;&#x5355;&#x680F;&#x7EC4;&#x4EF6;</li>
+<li>drawing.vue&#xFF1A;&#x753B;&#x677F;&#x7EC4;&#x4EF6;</li>
+</ul>
+</li>
+<li>assets<ul>
+<li>global-style.css&#xFF1A;&#x5168;&#x5C40;&#x6837;&#x5F0F;<h3 id="&#x5168;&#x5C40;&#x6837;&#x5F0F;">&#x5168;&#x5C40;&#x6837;&#x5F0F;</h3>
+&#x5728;&#x6B63;&#x5F0F;&#x5E03;&#x5C40;&#x4E4B;&#x524D;&#xFF0C;&#x5148;&#x8BBE;&#x7F6E;&#x597D;&#x9875;&#x9762;&#x7684;&#x5168;&#x5C40;&#x6837;&#x5F0F;&#xFF0C;&#x5728;<code>global-style.css</code>&#x4E2D;&#x5199;&#x5165;
+```css
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+body,
+form,
+fieldset,
+input,
+textarea,
+blockquote,
+p {
+padding: 0;
+margin: 0;
+}
+textarea {
+padding: 5px 11px;
+border: 1px solid #ccc;
+}
+textarea::placeholder {
+color: #ccc;
+}
+a {
+color: #000;
+text-decoration: none;
+}
+li {
+list-style-type: none;
+}
+img {
+vertical-align: top;
+border: 0;
+}
+ol,
+ul {
+list-style: none;
+}</li>
+</ul>
+</li>
+</ul>
+<p>table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}</p>
+<p>th,
+td {
+  padding: 0px;
+}
+/<em> &#x5B9A;&#x4E49;&#x5B57;&#x4F53;&#xFF0C;&#x5728;&#x963F;&#x91CC;&#x56FE;&#x6807;&#x5E93;&#x4E2D;&#x751F;&#x6210;&#xFF0C;&#x4F7F;&#x7528;unicode&#x7C7B;&#x578B; </em>/
+@font-face {
+  font-family: &apos;iconfont&apos;;
+  src: url(&apos;./icon-font/iconfont.eot&apos;);
+  src: url(&apos;./icon-font/iconfont.eot?#iefix&apos;) format(&apos;embedded-opentype&apos;),
+      url(&apos;./icon-font/iconfont.woff2&apos;) format(&apos;woff2&apos;),
+      url(&apos;./icon-font/iconfont.woff&apos;) format(&apos;woff&apos;),
+      url(&apos;./icon-font/iconfont.ttf&apos;) format(&apos;truetype&apos;),
+      url(&apos;./icon-font/iconfont.svg#iconfont&apos;) format(&apos;svg&apos;);
+}
+/<em> &#x8BBE;&#x7F6E;&#x5B57;&#x4F53;&#x683C;&#x5F0F; </em>/
+.iconfont {
+  /<em> &#x5B57;&#x4F53;&#x7C7B;&#x522B;&#x4E3A;&#x4E0A;&#x9762;&#x5B9A;&#x4E49;&#x7684;iconfont </em>/
+  font-family: &quot;iconfont&quot; !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+```</p>
 
                                 
                                 </section>
@@ -265,12 +353,8 @@
 
             
                 
-                <a href="../" class="navigation navigation-prev " aria-label="Previous page: Introduction">
-                    <i class="fa fa-angle-left"></i>
-                </a>
                 
-                
-                <a href="writing.html" class="navigation navigation-next " aria-label="Next page: Writing is nice">
+                <a href="css.html" class="navigation navigation-next navigation-unique" aria-label="Next page: 页面布局">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -281,7 +365,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Part I","level":"1.2","depth":1,"next":{"title":"Writing is nice","level":"1.2.1","depth":2,"path":"part1/writing.md","ref":"part1/writing.md","articles":[]},"previous":{"title":"Introduction","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"part1/README.md","mtime":"2020-06-10T14:35:36.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-06-10T14:37:21.264Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"项目基本架构","level":"1.2.1","depth":2,"next":{"title":"页面布局","level":"1.2.2","depth":2,"path":"start/css.md","ref":"start/css.md","articles":[]},"previous":{"title":"开始","level":"1.2","depth":1,"ref":"","articles":[{"title":"项目基本架构","level":"1.2.1","depth":2,"path":"start/structure.md","ref":"start/structure.md","articles":[]},{"title":"页面布局","level":"1.2.2","depth":2,"path":"start/css.md","ref":"start/css.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"start/structure.md","mtime":"2020-06-12T13:22:04.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-06-12T12:15:15.138Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
@@ -289,6 +373,10 @@
         
     <script src="../gitbook/gitbook.js"></script>
     <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
     
         
         <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
