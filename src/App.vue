@@ -4,10 +4,10 @@
     <!-- <router-view/> -->
     <div class="tab-container">
       <!-- 父组件监听子组件的no事件 -->
-      <Tab @changecurcor='change' @changecolor='changecolor'></Tab>
+      <Tab @changecurcor='change' @changecolor='changecolor' @changetype='changetype'></Tab>
     </div>
     <div class="drawing-container">
-      <Drawing :curcursor='curcursor' :colors="colors"></Drawing>
+      <Drawing :curcursor='curcursor' :colors="colors" :type='pentype'></Drawing>
     </div>
     <!-- <div class="footer"></div> -->
   </div>
@@ -49,6 +49,8 @@ export default {
       lineType: [0, 0],
       //
       canDraw: false,
+      // 笔型
+      pentype: null
     }
   },
   methods: {
@@ -57,6 +59,10 @@ export default {
     },
     changecolor(val) {
       this.colors.hex = val.hex
+    },
+    changetype(type) {
+      this.pentype = type
+      // console.log(type)
     }
   }
 

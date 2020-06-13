@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+// 引入vuex
+// import store from './vuex/store'
 // import router from './router'
 // 引入全局样式
 import '../src/assets/global-style.css'
@@ -14,6 +16,8 @@ new Vue({
   // el只在new创建实例时生效，提供一个在页面上已存在的dom元素作为vue实例的挂载目标
   el: '#app',
   // router,
+  // 注入store
+  // store,
   components: { App },
   // template后是一个作为vue实例标识使用的字符串模版
   // 模版会替换挂载的元素，挂载元素的内容都将被忽略

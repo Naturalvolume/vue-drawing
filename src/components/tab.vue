@@ -160,6 +160,7 @@ export default {
       this.$emit('changecurcor', this.curcursor)
       // 选择画笔，画画
       // this.draw_graph(tool.fun)
+      this.$emit('changetype', tool.fun)
       // 更改所有tools被选择的状态
       this.chooseImg(tool)
     },

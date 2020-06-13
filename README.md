@@ -1,11 +1,17 @@
 # vue-drawing
 一个简单的用vue和canvas实现的网页画板
 > A Vue.js project
-# 组件间传值
+## 一、vue
 ### 1.单向数据流：父组件向子组件传值
 父组件的prop更新会下流到子组件中，但是反过来不行，防止子组件变更父组件状态。同时，注意
 - 不该在子组件内部改变prop
 - 需要在子组件中将prop转换成需要的格式时，由于对象和数组是通过引用传入的，所以在子组件中改变对象或数组本身将会影响到父组件的状态。
+## 2.computed和watch
+computed和watch都是当值发生改变时被触发，但是两者的使用场景不同
+- computed：只有当被计算的值（可能多个值的联合）发生改变时被触发，适用于计算已有的值并返回结果
+- watch：监听某个值，当它变化时，执行对应的操作（触发函数）
+## canvas
+1. beginPath()：[这里有坑](https://blog.csdn.net/CjmHW/article/details/87778840)
 # 遇到的问题
 ### 1.unicode编码问题
 在标签中可以直接使用unicode字符，如`<span class="iconfont">&#xe7cd;</span>`，但是在`v-for`循环中用对象取unicode编码时就不能在页面中显示出正确的图标了，这是因为：只能在标签中才能使用unicode，而javascript只能处理UCS-2编码。
@@ -90,3 +96,4 @@ isChoose是布尔值，决定是否显示selected样式
 <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
 ```
 ### 5.[颜色选择器的使用](https://www.cnblogs.com/caohanren/articles/11851131.html)
+### 6.浏览器和元素的一系列宽高属性（offset、scroll、client）

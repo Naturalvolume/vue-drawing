@@ -1,10 +1,9 @@
 # Summary
-
-* [Introduction](README.md)
-* [Part I](part1/README.md)
-    * [Writing is nice](part1/writing.md)
-    * [GitBook is nice](part1/gitbook.md)
-* [Part II](part2/README.md)
-    * [We love feedback](part2/feedback_please.md)
-    * [Better tools for authors](part2/better_tools.md)
+* [简介](README.md)
+* 开始
+    * [项目基本架构](start/structure.md)
+    * [页面布局](start/css.md)
+* 数据
+    * [菜单栏数据](part2/feedback_please.md)
+    * [画板数据](part2/better_tools.md)
 
