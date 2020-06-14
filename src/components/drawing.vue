@@ -1,5 +1,9 @@
 <template>
   <div class="drawing-wrapper" ref='container' :style="{cursor: curcursor}">
+    <!-- 这是专门作为下载图片的连接，javascript:void(0);表示执行一个空函数，不跳转页面
+      download是定义的图片名称，v-show这个连接不显示
+     -->
+    <a ref='download' href='javascript:void(0);' download='image.png' v-show='false'></a>
     <canvas id="canvas" ref="canvas"></canvas>
     <canvas id="canvas_mask" ref="canvas_mask"></canvas>
   </div>
@@ -8,7 +12,18 @@
 <script>
 export default {
   name: 'drawing',
-  props: ['curcursor','colors','type'],
+  // 1.直接使用父组件传值时可以用数组，比较方便
+  props: ['curcursor','colors','drawType','clearType','down','penSize'],
+  // 2.要规定传入的需求（类型、默认值、是否必须时），用对象
+  // 注意：这样写至少需要定义值的类型，否则会无法识别props
+  // props: {
+  //   curcursor: String,
+  //   drawType: {
+  //     type: String,
+  //     default: 'pencil'  不需要添加默认值，一开始父组件就传递值过来了
+  //   },
+  //   colors: Object
+  // },
   data: () => {
     return {
       container: null,
@@ -20,7 +35,7 @@ export default {
       //
       canDraw: false,
       // 笔的粗细
-      pensize: 10,
+      // penSize: 1,
       // 虚线间隔初始值
       lineType: [0, 0],
       widthSize: 0,
@@ -29,12 +44,33 @@ export default {
   },
   // 用watch监听父组件传来的值是否发生变化
   watch: {
-    type: {
-      handler(type) {
-        // console.log(type, 'canvas')
-        this.draw(type)
+    // 监听到样式改变，调用画图函数
+    drawType: {
+      handler(drawType) {
+        this.draw(drawType)
+      },
+      // 表示一开始就执行handler方法，不等type改变
+      // 这里不能一开始就调用画图函数，因为dom还没有渲染好，获取不到
+      // immediate: true
+    },
+    // 监听到颜色改变，调用样式初始化
+    // 2.以字符串的形式仅监听对象属性变化，减少性能开销
+    'colors.hex': {
+      handler() {
+        this.changeDrawType()
       }
-
+      // 1.使用深度监听对象属性变化，但会造成性能开销
+      // deep:true
+    },
+    clearType: {
+      handler() {
+        this.clearContext('1')
+      }
+    },
+    down: {
+      handler() {
+        this.downloadImage()
+      }
     }
   },
   // 注意啦! 生命周期也是用对象的形式使用
@@ -64,6 +100,8 @@ export default {
       this.context = this.canvas.getContext('2d')
       this.context_mask = this.canvas_mask.getContext('2d')
       this.initSize()
+      // 默认是铅笔
+      this.draw(this.drawType)
       // offset可以获取元素与左边元素的距离，这里能用是因为画板左侧没有元素
       // 这里也不能用，因为宽高不能随着浏览器的变化而变化
       // this.widthSize = canvas.offsetLeft
@@ -71,24 +109,27 @@ export default {
       // this.heightSize = canvas.offsetTop
       // console.log(this.widthSize, this.heightSize)
     },
-    // 开始画画
-    draw(type) {
-      console.log(type)
-      // 注意啦！这里z-index转换成了驼峰式
-      this.canvas_mask.style.zIndex = 1
-      // 先画在蒙版上 再复制到画布上
-      this.canDraw = false
-      let startX, startY
-
-      // 鼠标按下获取xy开始画图
-      let mousedown = (e) => {
-        // 先初始化，设置线条颜色等基本信息
-        // 应该在每次移动时都更新一下线条样式
+    changeDrawType() {
+      // 先初始化，设置线条颜色等基本信息
+        // 每次切换颜色／线条／样式时更新
         this.context.strokeStyle = this.colors.hex
         this.context_mask.strokeStyle = this.colors.hex
         this.context_mask.fillStyle = this.colors.hex
         // 改变线条粗细
         this.context_mask.lineWidth = this.penSize
+    },
+    draw(type) {
+      console.log(type)
+      // 注意啦！这里z-index转换成了驼峰式
+      // 不要设置堆叠！！不要设置背景颜色！！
+      // this.canvas_mask.style.zIndex = 1
+      // 先画在蒙版上 再复制到画布上
+      this.canDraw = false
+      let startX, startY
+      this.changeDrawType()
+      // 鼠标按下获取xy开始画图
+      let mousedown = (e) => {
+
         e = e || window.event
         // clientX是相对于当前浏览器页面的横坐标，所以要减去画布左边右边
         // 后面开始画时要用到这两个数据（这里也是正确的）
@@ -110,22 +151,18 @@ export default {
         if (type == 'pencil') {
           this.context_mask.beginPath()
         }
-        // circle和rubber是在这里设置圆和橡皮的初始大小，实现点击即可画圆，清除画板
-        // else if (type == 'circle') {
-        //   // 疑问：不理解
-        //   this.context.beginPath()
-        //   this.context.moveTo(startX, startY)
-        //   this.context.lineTo(startX + 5, startY + 5)
-        //   this.context.stroke()
-        // } else if (type == 'rubber') {
-        //   // clearRect(height = this.heightSize,height)清除指定的矩形区域，x,y表示矩形起始坐标
-        //   this.context.clearRect(
-        //     startX - this.penSize * 10,
-        //     startY - this.penSize * 10,
-        //     this.penSize * 20,
-        //     this.penSize * 20
-        //   )
-        // }
+        // 这里只有橡皮需要在鼠标按下和鼠标按下且移动时都写清除逻辑
+        // 圆也不用写，是因为只要有鼠标移动就一直画的有圆，不管canDraw的状态
+        // 而橡皮不能只要移动就清除区域，一定要按下才可以
+        else if (type == 'rubber') {
+          // 实现按下鼠标就清除区域，而不是非要移动
+          this.context.clearRect(
+            startX - this.penSize,
+            startY - this.penSize,
+            this.penSize * 2,
+            this.penSize * 2
+          )
+        }
       }
       // 鼠标离开 把蒙版canvas的图片复制到canvas中，防止每画一个图像蒙板清空一次
       let mouseup = (e) => {
@@ -140,28 +177,14 @@ export default {
         if (type != 'rubber') {
           image.src = this.canvas_mask.toDataURL()
           image.onload = () => {
-            console.log(image)
-            this.context.drawImage(
-              image,
-              0,
-              0,
-              image.width,
-              image.height,
-              0,
-              0,
-              this.widthSize, this.heightSize
-            )
-            this.canvas.zIndex = 2
+            console.log(image.width, image.height)
+            this.context.drawImage(image, 0, 0, image.width, image.height)
+
+            // this.canvas.style.zIndex = 2
 
             // 清除mask画板
-            // this.clearContext()
-            // this.saveImageToAry()
+            this.clearContext()
           }
-
-          // this.context.beginPath()
-          // this.context.moveTo(x, y)
-          // this.context.lineTo(x + 2, y + 2)
-          // this.context.stroke()
         }
       }
       // 鼠标移动
@@ -176,11 +199,11 @@ export default {
         // this.context_mask.setLineDash(this.lineType)
         //方块  即4条直线
         if (type == 'square') {
+          // 清除画布放到哪里都可以
+          this.clearContext()
           if (this.canDraw) {
-
             this.context_mask.beginPath()
             // 鼠标移动过程中边画边清除，在beginpath之前或之后清除都无所谓
-            this.clearContext()
             this.context_mask.strokeRect(startX, startY, x-startX, y-startY)
             // 矩形不需要描边，strokeRect本身就有描边效果 this.context_mask.stroke()
           }
@@ -197,6 +220,7 @@ export default {
         } else if (type == 'pencil') {
 
           if (this.canDraw) {
+            // 注意啦！铅笔和涂鸦都不用在开始画之后一直清除屏幕了！因为它们就是要连续的画的轨迹
             // 这里不能再加beginpath，moveto了
             // this.context_mask.moveTo(startX, startY)
             this.context_mask.lineTo(
@@ -218,6 +242,7 @@ export default {
             this.context_mask.arc(startX, startY, radii, 0, Math.PI * 2, false)
             this.context_mask.stroke()
           } else {
+
             this.context_mask.beginPath()
             this.context_mask.arc(x, y, 10, 0, Math.PI * 2, false)
             this.context_mask.stroke()
@@ -229,6 +254,7 @@ export default {
             this.context_mask.beginPath()
             // this.context_mask.strokeStyle = this.color.hex
             // this.context_mask.fillStyle = this.color.hex
+            console.log(this.context_mask.strokeStyle)
             this.context_mask.arc(x, y, this.penSize * 10, 0, Math.PI * 2, false)
             this.context_mask.fill()
             // 直接填充就好，干嘛还要stroke
@@ -238,8 +264,8 @@ export default {
             this.context_mask.beginPath()
             // this.context_mask.fillStyle = this.color.hex
             this.context_mask.arc(x, y, this.penSize * 10, 0, Math.PI * 2, false)
-            // 未填充的时候 this.context_mask.fill()
-            this.context_mask.stroke()
+            this.context_mask.fill()
+            // this.context_mask.stroke()
           }
           //橡皮擦 不管有没有在画都出现小方块 按下鼠标 开始清空区域
         } else if (type == 'rubber') {
@@ -247,63 +273,58 @@ export default {
           // this.context_mask.setLineDash([0, 0])
           // 线性保持为1
           this.context_mask.lineWidth = 1
-          // this.clearContext()
+          this.clearContext()
           this.context_mask.beginPath()
           // 外框保持黑色
           this.context_mask.strokeStyle = '#000000'
-          this.context_mask.strokeRect(x - this.penSize * 10, y - this.penSize * 10, this.penSize*20, this.penSize*20)
-
-          // this.context_mask.moveTo(x - this.penSize * 10, y - this.penSize * 10)
-          // this.context_mask.lineTo(x + this.penSize * 10, y - this.penSize * 10)
-          // this.context_mask.lineTo(x + this.penSize * 10, y + this.penSize * 10)
-          // this.context_mask.lineTo(x - this.penSize * 10, y + this.penSize * 10)
-          // this.context_mask.lineTo(x - this.penSize * 10, y - this.penSize * 10)
-          // this.context_mask.stroke()
+          this.context_mask.strokeRect(x - this.penSize, y - this.penSize, this.penSize*2, this.penSize*2)
           if (this.canDraw) {
             this.context.clearRect(
-              x - this.penSize * 10,
-              y - this.penSize * 10,
-              this.penSize * 20,
-              this.penSize * 20
+              x - this.penSize,
+              y - this.penSize,
+              this.penSize * 2,
+              this.penSize * 2
             )
           }
           // this.context_mask.setLineDash(this.lineType)
+        } else if (type == 'quadratic') {
+          if(this.canDraw) {
+            this.clearContext()
+            this.context_mask.beginPath()
+            this.context_mask.moveTo(startX, startY)
+            let controlX = (startX + x) * 0.5
+            let controlY = Math.abs(startY - y) * 0.3
+            this.context_mask.quadraticCurveTo(controlX, controlY, x, y)
+            this.context_mask.stroke()
+          }
         }
       }
-      //鼠标离开区域以外 除了涂鸦 都清空
-      // let mouseout = () => {
-      //   if (type != 'handwriting') {
-      //     this.clearContext()
-      //   }
-      // }
+      // 鼠标离开区域以外 要清空残影，否则会有圆遗留
+      let mouseout = () => {
+          this.clearContext()
+      }
 
       // onmousedown onmousemove onmouseup鼠标的一系列事件
       this.canvas_mask.onmousedown = () => mousedown()
       this.canvas_mask.onmousemove = () => mousemove()
       this.canvas_mask.onmouseup = () => mouseup()
-      // this.canvas_mask.onmouseout = () => mouseout()
+      this.canvas_mask.onmouseout = () => mouseout()
     },
     clearContext(type) {
       if (!type) {
         this.context_mask.clearRect(0, 0, this.widthSize, this.heightSize)
-        // 神奇，这里又是哪里不对了，明明一样的写法
-        // this.context_mask.clearRect(
-        //   0,
-        //   0,
-        //   this.widthSize,
-        //   this.heighSize
-        // )
       } else {
         this.context_mask.clearRect(0, 0, this.widthSize, this.heightSize)
         this.context.clearRect(0, 0, this.widthSize, this.heightSize)
       }
     },
-    //保存历史 用于撤销
-    saveImageToAry() {
-      // this.cancelIndex = 0
-      // let dataUrl = this.canvas.toDataURL()
-      // this.cancelList.push(dataUrl)
-    },
+    // 自定义下载画板图片
+    downloadImage() {
+      // 将连接的地址改成图片的地址
+      this.$refs.download.href = this.canvas.toDataURL()
+      // 再触发点击事件，连接发现不能是可以跳转的格式，就会自动下载
+      this.$refs.download.click()
+    }
   }
 }
 </script>
@@ -313,7 +334,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: gray;
+    background-color: #eceff1;
   }
   canvas {
     /* 绝对定位元素居中，定宽、margin:auto，left right 0缺一不可 */
@@ -326,6 +347,9 @@ export default {
     right: 0;
     top: 0;
     bottom: 0;
-    background-color:yellow;
+    border: 3px solid #90a4ae;
+    border-radius: 10px;
+    /* 在画板里不要设置背景颜色！！不要设置堆叠层！！ */
+    /* background-color:yellow; */
   }
 </style>

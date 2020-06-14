@@ -3,15 +3,15 @@
     <div class="tab-container">
       <!-- 点击事件监听 -->
       <div class="title">
-        {{title}} {{color.hex}}
+        {{title}}
       </div>
-      <div v-for="tab in tabs" :key='tab.title'>
+      <div class="back" v-for="tab in tabs" :key='tab.title'>
           <!-- unicode直接在标签中使用，可以识别这是unicode编码
             在对象中使用再引入，因为js只能chuliUCS-2编码，所以在遍历过程中不能识别unicode编码
             索引在使用前，要先转码
           -->
           <!-- 单独给v-for循环的某个元素绑定方法 -->
-          <div class='button-item' @click="tab.title == '选择颜色' ? chooseColor() : ''"><span class="iconfont">{{tab.icon}}</span></div>
+          <div class='button-item' @click="tab.title == '选择颜色' ? chooseColor() : tabFun(tab.fun)"><span class="iconfont">{{tab.icon}}</span></div>
         <!-- 别忘了用字体库时要加class -->
       </div>
     </div>
@@ -19,7 +19,7 @@
       取色器的input事件，点击颜色和手动填颜色都会改变input框中的值，改变本组件color，且同时可传val值
       v-model绑定color之后，就可以自动改变color的值了，这就是双向数据绑定
     -->
-    <Sketch-picker class='picker' v-model='color' v-show="ischoosecolor" @input="inputcolor"></Sketch-picker>
+    <Sketch-picker class='picker' v-model='color' v-show="ischoosecolor" @input="inputcolor" @click="stop()"></Sketch-picker>
     <div class="tools-container">
       <div v-for="tool in tools" :key='tool.title'>
           <!-- unicode直接在标签中使用，可以识别这是unicode编码
@@ -50,14 +50,14 @@ export default {
   },
   data() {
     return {
-      title: 'Kathy is so beautify',
+      title: 'Drawing',
       // 要传给父元素的鼠标类型
       curcursor: null,
       // 设置是否显示取色器
       ischoosecolor: false,
       // 设置取色器原始颜色
       color: {
-        hex: '#194d33',
+        hex: '#000',
         hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
         hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
         rgba: { r: 25, g: 77, b: 51, a: 1 },
@@ -85,12 +85,19 @@ export default {
         icon: '\ue60a',
         title: '铅笔',
         fun: 'pencil',
-        ischoose: false
+        // 默认铅笔被选择
+        ischoose: true
       },
       {
         icon: '\ue668',
         title: '直线',
         fun: 'line',
+        ischoose: false
+      },
+      {
+        icon: '\ue668',
+        title: '曲线',
+        fun: 'quadratic',
         ischoose: false
       },
       {
@@ -122,10 +129,41 @@ export default {
     }
 
   },
+  mounted() {
+    document.body.addEventListener('click', this.chooseColorBody)
+    let sketch = document.getElementsByClassName('picker')[0]
+    console.log(sketch)
+    // 阻止颜色选择器冒泡，否则点击选择器也会作用到body.click上
+    sketch.addEventListener('click', this.stop)
+    // 疑问：为什么不能这样绑定
+    // document.body.onclick=function(){
+		// 	if(this.ischoosecolor) this.ischoosecolor = false
+		// }
+  },
   methods: {
     // 点击之后发出改变父元素状态的事件
-    chooseColor() {
+    chooseColor(e) {
+      e = e || window.event
       this.ischoosecolor = this.ischoosecolor ? false : true
+      // 必须要阻止事件冒泡，才能实现跟文档主页的交替
+      e.stopPropagation()
+    },
+    stop() {
+      let e = e || window.event
+      e.stopPropagation()
+    },
+    // 导航栏按键
+    tabFun(fun) {
+      if (fun === 'clear') {
+        // 清除两层画板
+        this.$emit('clear')
+      } else if (fun === 'download') {
+        // 用api下载图片
+        this.$emit('download')
+      }
+    },
+    chooseColorBody() {
+      if(this.ischoosecolor) this.ischoosecolor = false
     },
     // 手动改变颜色值
     inputcolor(val) {
@@ -203,6 +241,14 @@ export default {
   align-items: center;
 
 }
+/* 点击改变样式，只改变点击时的
+迷惑：为何加上伪类就不能改变整个按钮的颜色了，而只能改变图标部分的 */
+/* .button-item :active {
+  background-color: #757575;
+} */
+.tab-container :active {
+  background-color: #b0bec5;
+}
 .title {
   font-size: 20px;
   margin-right: 10px;
@@ -210,10 +256,14 @@ export default {
   color: #eceff1;
 }
 .button-item {
-  border: 1px solid #afd;
+  border: 1px solid #cfd8dc;
+  background-color: #cfd8dc;
+  color:#37474f;
+  font-weight: bold;
   text-align: center;
   margin-right: 2px;
 }
+
 span {
   font-size: 16px;
   /* margin: 20px;   仅仅设置margin，不设置block块盒，会导致只吸收左右margin，上下的margin不会改变，因为这是inline元素 */
@@ -229,6 +279,6 @@ span {
 }
 .selected {
   /* 设置被选择样式，最后加 important表明优先级最高 */
-  background: rgba(196, 56, 56, 0.35) !important;
+  background: #90a4ae !important;
 }
 </style>

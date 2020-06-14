@@ -4,10 +4,10 @@
     <!-- <router-view/> -->
     <div class="tab-container">
       <!-- 父组件监听子组件的no事件 -->
-      <Tab @changecurcor='change' @changecolor='changecolor' @changetype='changetype'></Tab>
+      <Tab @changecurcor='change' @changecolor='changecolor' @changetype='changetype' @clear='clear' @download='download'></Tab>
     </div>
     <div class="drawing-container">
-      <Drawing :curcursor='curcursor' :colors="colors" :type='pentype'></Drawing>
+      <Drawing :curcursor='curcursor' :colors="colors" :drawType='pentype' :clearType='clearType' :down='down'></Drawing>
     </div>
     <!-- <div class="footer"></div> -->
   </div>
@@ -35,7 +35,7 @@ export default {
       ischoosecolor: false,
       //
       colors: {
-        hex: '#194d33',
+        hex: '#000',
         hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
         hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
         rgba: { r: 25, g: 77, b: 51, a: 1 },
@@ -49,8 +49,10 @@ export default {
       lineType: [0, 0],
       //
       canDraw: false,
-      // 笔型
-      pentype: null
+      // 笔型，默认是铅笔
+      pentype: 'pencil',
+      clearType: null,
+      down: null,
     }
   },
   methods: {
@@ -63,6 +65,13 @@ export default {
     changetype(type) {
       this.pentype = type
       // console.log(type)
+    },
+    clear() {
+      // 每次传入一个随机数，所以每次都改变了
+      this.clearType = Math.random()
+    },
+    download() {
+      this.down = Math.random()
     }
   }
 
@@ -78,7 +87,6 @@ export default {
 
   /* box-sizing: border-box;   根元素这里没有使用padding之类不用定义这个，这个属性并不能继承*/
   position: fixed;
-  background-color: blue;
   /* 这里实现占满整个视口，注意要设置width、height，只设置top left不能实现这样的效果 */
   width: 100%;
   height: 100%;
@@ -88,7 +96,7 @@ export default {
 .tab-container {
   height: 60px;
   width: 100%;
-  background-color:red;
+  /* background-color:red; */
   /* z-index: 10; */
 }
 .drawing-container {
@@ -99,6 +107,5 @@ export default {
   /* height: calc(100% -60px);    这个属性并没有做成占满剩下的高度 */
   /* display: flex; */
   /* flex: 1; */
-  background-color: aqua;
 }
 </style>

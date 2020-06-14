@@ -6,10 +6,11 @@
 父组件的prop更新会下流到子组件中，但是反过来不行，防止子组件变更父组件状态。同时，注意
 - 不该在子组件内部改变prop
 - 需要在子组件中将prop转换成需要的格式时，由于对象和数组是通过引用传入的，所以在子组件中改变对象或数组本身将会影响到父组件的状态。
+- 子组件中限制props的属性
 ## 2.computed和watch
 computed和watch都是当值发生改变时被触发，但是两者的使用场景不同
 - computed：只有当被计算的值（可能多个值的联合）发生改变时被触发，适用于计算已有的值并返回结果
-- watch：监听某个值，当它变化时，执行对应的操作（触发函数）
+- watch：监听某个值，当它变化时，执行对应的操作（触发函数），[watch的深度监听](https://www.cnblogs.com/yesu/p/9546458.html)
 ## canvas
 1. beginPath()：[这里有坑](https://blog.csdn.net/CjmHW/article/details/87778840)
 # 遇到的问题
@@ -97,3 +98,7 @@ isChoose是布尔值，决定是否显示selected样式
 ```
 ### 5.[颜色选择器的使用](https://www.cnblogs.com/caohanren/articles/11851131.html)
 ### 6.浏览器和元素的一系列宽高属性（offset、scroll、client）
+[各位置属性详解](https://blog.csdn.net/zh_rey/article/details/78967174)
+[坐标相关属性](https://www.cnblogs.com/deerfig/p/6432683.html)
+### 7.堆叠上下文
+两层画板间的配合，画到画板上的要比背景低一层？？？设置背景颜色会被遮盖
