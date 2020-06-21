@@ -7,8 +7,9 @@
   - drawing.vue：画板组件
 - assets
   - global-style.css：全局样式
+
 ### 全局样式
-在正式布局之前，先设置好页面的全局样式，在`global-style.css`中写入
+在正式布局之前，先设置好页面的全局样式，在`global-style.css`中写入：
 ```css
 div,
 dl,
@@ -86,3 +87,4 @@ td {
   -moz-osx-font-smoothing: grayscale;
 }
 ```
+注意啦！这里的`@font-face`是在阿里图标库下载的以unicode形式编码的字体图标，用来做菜单栏。

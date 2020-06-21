@@ -13,6 +13,10 @@ computed和watch都是当值发生改变时被触发，但是两者的使用场�
 - watch：监听某个值，当它变化时，执行对应的操作（触发函数），[watch的深度监听](https://www.cnblogs.com/yesu/p/9546458.html)
 ## canvas
 1. beginPath()：[这里有坑](https://blog.csdn.net/CjmHW/article/details/87778840)
+2. [实现橡皮擦除效果](https://www.cnblogs.com/zhao-qing/p/6734491.html)
+3. canvas底层原理：
+[理解Canvas原理](https://blog.csdn.net/qq372072753/article/details/54629610)
+[canvas在浏览器里的渲染原理？](https://www.zhihu.com/question/31894515)
 # 遇到的问题
 ### 1.unicode编码问题
 在标签中可以直接使用unicode字符，如`<span class="iconfont">&#xe7cd;</span>`，但是在`v-for`循环中用对象取unicode编码时就不能在页面中显示出正确的图标了，这是因为：只能在标签中才能使用unicode，而javascript只能处理UCS-2编码。

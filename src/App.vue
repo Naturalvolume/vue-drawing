@@ -4,10 +4,10 @@
     <!-- <router-view/> -->
     <div class="tab-container">
       <!-- 父组件监听子组件的no事件 -->
-      <Tab @changecurcor='change' @changecolor='changecolor' @changetype='changetype' @clear='clear' @download='download'></Tab>
+      <Tab @changeCursor='changeCursor' @changeColor='changeColor' @changeType='changeType' @clear='clear' @download='download'></Tab>
     </div>
     <div class="drawing-container">
-      <Drawing :curcursor='curcursor' :colors="colors" :drawType='pentype' :clearType='clearType' :down='down'></Drawing>
+      <Drawing :curCursor='curCursor' :colors="colors" :drawType='drawType' :clearType='clearType' :downLoad='downLoad'></Drawing>
     </div>
     <!-- <div class="footer"></div> -->
   </div>
@@ -30,9 +30,8 @@ export default {
   data:() => {
     return {
       // 设置默认鼠标样式
-      curcursor: 'default',
-      // 是否选择颜色
-      ischoosecolor: false,
+      curCursor: 'default',
+
       //
       colors: {
         hex: '#000',
@@ -42,28 +41,26 @@ export default {
         a: 1
       },
 
-      toolsToggle: false,
       // 铅笔粗细初始值
       penSize: 1,
       // 虚线间隔初始值
       lineType: [0, 0],
-      //
-      canDraw: false,
+
       // 笔型，默认是铅笔
-      pentype: 'pencil',
+      drawType: 'pencil',
       clearType: null,
-      down: null,
+      downLoad: null,
     }
   },
   methods: {
-    change(val) {
-      this.curcursor = val
+    changeCursor(val) {
+      this.curCursor = val
     },
-    changecolor(val) {
+    changeColor(val) {
       this.colors.hex = val.hex
     },
-    changetype(type) {
-      this.pentype = type
+    changeType(type) {
+      this.drawType = type
       // console.log(type)
     },
     clear() {
@@ -71,7 +68,7 @@ export default {
       this.clearType = Math.random()
     },
     download() {
-      this.down = Math.random()
+      this.downLoad = Math.random()
     }
   }
 

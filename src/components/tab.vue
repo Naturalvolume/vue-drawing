@@ -19,16 +19,12 @@
       取色器的input事件，点击颜色和手动填颜色都会改变input框中的值，改变本组件color，且同时可传val值
       v-model绑定color之后，就可以自动改变color的值了，这就是双向数据绑定
     -->
-    <Sketch-picker class='picker' v-model='color' v-show="ischoosecolor" @input="inputcolor" @click="stop()"></Sketch-picker>
+    <Sketch-picker class='picker' v-model='color' v-show="isChooseColor" @input="inputColor"></Sketch-picker>
     <div class="tools-container">
       <div v-for="tool in tools" :key='tool.title'>
-          <!-- unicode直接在标签中使用，可以识别这是unicode编码
-            在对象中使用再引入，因为js只能chuliUCS-2编码，所以在遍历过程中不能识别unicode编码
-            索引在使用前，要先转码
-          -->
-          <!-- 点击根据元素改变事件 :style="{cursor: curcursor}" 鼠标样式只能在固定的元素中保持改变状态 -->
+          <!-- 点击根据元素改变事件 :style="{cursor: curCursor}" 鼠标样式只能在固定的元素中保持改变状态 -->
           <!-- 动态绑定样式，注意要加中括号 -->
-          <div :class="[{'selected':tool.ischoose},'button-item']"  @click='drawType(tool)'><span class="iconfont">{{tool.icon}}</span></div>
+          <div :class="[{'selected':tool.isChoose},'button-item']"  @click='drawType(tool)'><span class="iconfont">{{tool.icon}}</span></div>
         <!-- 别忘了用字体库时要加class -->
       </div>
     </div>
@@ -52,9 +48,9 @@ export default {
     return {
       title: 'Drawing',
       // 要传给父元素的鼠标类型
-      curcursor: null,
+      curCursor: null,
       // 设置是否显示取色器
-      ischoosecolor: false,
+      isChooseColor: false,
       // 设置取色器原始颜色
       color: {
         hex: '#000',
@@ -86,43 +82,43 @@ export default {
         title: '铅笔',
         fun: 'pencil',
         // 默认铅笔被选择
-        ischoose: true
+        isChoose: true
       },
       {
         icon: '\ue668',
         title: '直线',
         fun: 'line',
-        ischoose: false
+        isChoose: false
       },
       {
         icon: '\ue668',
         title: '曲线',
         fun: 'quadratic',
-        ischoose: false
+        isChoose: false
       },
       {
         icon: '\ue61a',
         title: '圆形',
         fun: 'circle',
-        ischoose: false
+        isChoose: false
       },
       {
         icon: '\ue6f0',
         name: '矩形',
         fun: 'square',
-        ischoose: false
+        isChoose: false
       },
       {
         icon: '\ue611',
         title: '填充',
         fun: 'handwriting',
-        ischoose: false
+        isChoose: false
       },
       {
         icon: '\ue6c2',
         title: '橡皮',
         fun: 'rubber',
-        ischoose: false
+        isChoose: false
       }
 
     ]
@@ -132,19 +128,18 @@ export default {
   mounted() {
     document.body.addEventListener('click', this.chooseColorBody)
     let sketch = document.getElementsByClassName('picker')[0]
-    console.log(sketch)
     // 阻止颜色选择器冒泡，否则点击选择器也会作用到body.click上
     sketch.addEventListener('click', this.stop)
     // 疑问：为什么不能这样绑定
     // document.body.onclick=function(){
-		// 	if(this.ischoosecolor) this.ischoosecolor = false
+		// 	if(this.isChooseColor) this.isChooseColor = false
 		// }
   },
   methods: {
     // 点击之后发出改变父元素状态的事件
     chooseColor(e) {
       e = e || window.event
-      this.ischoosecolor = this.ischoosecolor ? false : true
+      this.isChooseColor = this.isChooseColor ? false : true
       // 必须要阻止事件冒泡，才能实现跟文档主页的交替
       e.stopPropagation()
     },
@@ -163,26 +158,26 @@ export default {
       }
     },
     chooseColorBody() {
-      if(this.ischoosecolor) this.ischoosecolor = false
+      if(this.isChooseColor) this.isChooseColor = false
     },
     // 手动改变颜色值
-    inputcolor(val) {
+    inputColor(val) {
       // 取色器返回来的值跟 colors 的结构是一样的
-      this.$emit('changecolor', val)
+      this.$emit('changeColor', val)
     },
     // 根据点击的按钮更改鼠标样式
     drawType(tool) {
       switch (tool.fun) {
         case 'pencil':
           // 1.改变鼠标格式
-          this.curcursor ='text'
+          this.curCursor ="url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAZ0lEQVR4AdXOrQ2AMBRF4bMc/zOUOSrYoYI5cQQwpAieQDW3qQBO7Xebxx8bWAk5/CASmRHzRHtB+d0Bkw0W5ZiT0SYbFcl6u/2eeJHbxIHOhWO6Er6/y9syXpMul5PLefAGKZ1/rwtTimwbWLpiCgAAAABJRU5ErkJggg==') 3 24,  auto"
           break
         case 'rubber':
-          this.curcursor = 'pointer'
+          this.curCursor = 'pointer'
           break
         case 'handwriting':
           // 十字线
-          this.curcursor = 'crosshair'
+          this.curCursor = 'crosshair'
           break
         // 注意把使用默认样式的放一起，因为switch没有break会继续向下执行，直到遇到break
         case 'circle':
@@ -191,23 +186,23 @@ export default {
         // 记得一定要设置默认值，防止没有定义可用光标
         default:
           // 浏览器默认
-          this.curcursor = 'default'
+          this.curCursor = 'default'
           break
       }
       // 向父元素发出改变鼠标样式事件，注意这个事件要加引号
-      this.$emit('changecurcor', this.curcursor)
+      this.$emit('changeCursor', this.curCursor)
       // 选择画笔，画画
       // this.draw_graph(tool.fun)
-      this.$emit('changetype', tool.fun)
+      this.$emit('changeType', tool.fun)
       // 更改所有tools被选择的状态
       this.chooseImg(tool)
     },
     chooseImg(obj) {
       // 更改所有按钮未未选择
       for (let i = 0; i < this.tools.length; i++) {
-        this.tools[i].ischoose = false
+        this.tools[i].isChoose = false
       }
-      obj.ischoose = true
+      obj.isChoose = true
     },
 
   }

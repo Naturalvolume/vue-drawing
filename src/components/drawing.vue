@@ -1,5 +1,5 @@
 <template>
-  <div class="drawing-wrapper" ref='container' :style="{cursor: curcursor}">
+  <div class="drawing-wrapper" ref='container' :style="{cursor: curCursor}">
     <!-- 这是专门作为下载图片的连接，javascript:void(0);表示执行一个空函数，不跳转页面
       download是定义的图片名称，v-show这个连接不显示
      -->
@@ -13,11 +13,11 @@
 export default {
   name: 'drawing',
   // 1.直接使用父组件传值时可以用数组，比较方便
-  props: ['curcursor','colors','drawType','clearType','down','penSize'],
+  props: ['curCursor','colors','drawType','clearType','down'],
   // 2.要规定传入的需求（类型、默认值、是否必须时），用对象
   // 注意：这样写至少需要定义值的类型，否则会无法识别props
   // props: {
-  //   curcursor: String,
+  //   curCursor: String,
   //   drawType: {
   //     type: String,
   //     default: 'pencil'  不需要添加默认值，一开始父组件就传递值过来了
@@ -35,9 +35,7 @@ export default {
       //
       canDraw: false,
       // 笔的粗细
-      // penSize: 1,
-      // 虚线间隔初始值
-      lineType: [0, 0],
+      penSize: 1,
       widthSize: 0,
       heightSize: 0
     }
@@ -150,17 +148,19 @@ export default {
         // 这里必须要在鼠标按下时就开辟一条路径
         if (type == 'pencil') {
           this.context_mask.beginPath()
+          this.context_mask.moveTo(startX, startY)
         }
         // 这里只有橡皮需要在鼠标按下和鼠标按下且移动时都写清除逻辑
         // 圆也不用写，是因为只要有鼠标移动就一直画的有圆，不管canDraw的状态
         // 而橡皮不能只要移动就清除区域，一定要按下才可以
         else if (type == 'rubber') {
+          console.log(this.penSize)
           // 实现按下鼠标就清除区域，而不是非要移动
           this.context.clearRect(
-            startX - this.penSize,
-            startY - this.penSize,
-            this.penSize * 2,
-            this.penSize * 2
+            startX - this.penSize*5,
+            startY - this.penSize*5,
+            this.penSize * 10,
+            this.penSize * 10
           )
         }
       }
@@ -177,13 +177,13 @@ export default {
         if (type != 'rubber') {
           image.src = this.canvas_mask.toDataURL()
           image.onload = () => {
-            console.log(image.width, image.height)
+            //console.log(image.width, image.height)
             this.context.drawImage(image, 0, 0, image.width, image.height)
 
             // this.canvas.style.zIndex = 2
 
-            // 清除mask画板
-            this.clearContext()
+            // 清除mask画板，这里加不加都一样
+            // this.clearContext()
           }
         }
       }
@@ -222,7 +222,7 @@ export default {
           if (this.canDraw) {
             // 注意啦！铅笔和涂鸦都不用在开始画之后一直清除屏幕了！因为它们就是要连续的画的轨迹
             // 这里不能再加beginpath，moveto了
-            // this.context_mask.moveTo(startX, startY)
+            //
             this.context_mask.lineTo(
               x,
               y
@@ -269,6 +269,7 @@ export default {
           }
           //橡皮擦 不管有没有在画都出现小方块 按下鼠标 开始清空区域
         } else if (type == 'rubber') {
+          console.log('b')
           // 橡皮擦干嘛还用虚线
           // this.context_mask.setLineDash([0, 0])
           // 线性保持为1
@@ -277,13 +278,13 @@ export default {
           this.context_mask.beginPath()
           // 外框保持黑色
           this.context_mask.strokeStyle = '#000000'
-          this.context_mask.strokeRect(x - this.penSize, y - this.penSize, this.penSize*2, this.penSize*2)
+          this.context_mask.strokeRect(x - this.penSize*5, y - this.penSize*5, this.penSize*10, this.penSize*10)
           if (this.canDraw) {
             this.context.clearRect(
-              x - this.penSize,
-              y - this.penSize,
-              this.penSize * 2,
-              this.penSize * 2
+              x - this.penSize*5,
+              y - this.penSize*5,
+              this.penSize*10,
+              this.penSize*10
             )
           }
           // this.context_mask.setLineDash(this.lineType)
