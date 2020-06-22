@@ -14,3 +14,5 @@
     * [画图](Data/drawing.md)
     * [清除画板](Data/clear.md)
     * [下载图片](Data/download.md)
+* [进阶](canvas/README.md)
+    * [性能优化](Data/canvas.md)
