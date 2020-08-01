@@ -7,4 +7,4 @@
 - 画线条、圆、正方形、直线、贝塞尔曲线等
 - 清除画布
 - 下载画布
-### 想了解本项目的具体实现过程可以看这里：[vue画板](https://naturalvolume.github.io/vue-drawing/)
+### 想了解本项目的具体实现过程可以看这里：[vue画板教程](https://naturalvolume.github.io/vue-drawing/)

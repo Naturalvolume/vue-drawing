@@ -1,5 +1,5 @@
 ## 颜色选择器
-对呀一个画板，能够自由的选择和切换颜色是必须的，在这里使用`vue-color`取色器。
+对于一个画板，能够自由的选择和切换颜色是必须的，在这里使用`vue-color`取色器。
 #### 1.安装
 ```
 npm install --save vue-color
@@ -66,7 +66,7 @@ export default {
 - 点击按钮出现，再次点击按钮或其它地方消失
 ```html
 <!-- 最终的颜色选择器 -->
-<Sketch-picker class='picker' v-model='color' @input="inputcolor" v-show="ischoosecolor"></Sketch-picker>
+<Sketch-picker class='picker' v-model='color' @input="inputColor" v-show="ischooseColor"></Sketch-picker>
 ```
 (1) 双向绑定`v-model='color'`
 监听input事件
@@ -77,7 +77,7 @@ inputColor(val) {
 },
 ```
 (2) 点击效果
-`v-show="ischoosecolor"`决定了颜色选择器是否显示
+`v-show="ischooseColor"`决定了颜色选择器是否显示
 先在调色盘按钮上绑定事件，注意这里是在按钮列表中找到调色盘按钮绑定，所以要用三元选择符判断，后面的函数先空起来。
 ```html
 <!-- 按钮点击事件 -->
